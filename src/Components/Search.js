@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
-import { Context } from '../StarWarsProvider';
+import { Context, sortingType } from '../StarWarsProvider';
 
 function Search() {
   const {
     name, handleChange, value, comparison, column, handleFilter, handleButtonFilter,
+    filters, options, removeFilters, handleOrder, order, sortTable,
   } = useContext(Context);
-
-  /* useEffect(() => {}, [column, comparison, value]); */
 
   return (
 
@@ -28,11 +27,11 @@ function Search() {
             data-testid="column-filter"
             onChange={ handleFilter }
           >
-            <option value="population">population</option>
-            <option value="orbital_period">orbital_period</option>
-            <option value="diameter">diameter</option>
-            <option value="rotation_period">rotation_period</option>
-            <option value="surface_water">surface_water</option>
+            {
+              options.map((item, index) => (
+                <option key={ `${item.column}-${index}` } value={ item }>{ item }</option>
+              ))
+            }
           </select>
         </label>
         <label htmlFor="comparison">
@@ -51,7 +50,8 @@ function Search() {
           <input
             type="number"
             name="value"
-            value={ value }
+            value={ 0 }
+            placeholder={ 0 }
             data-testid="value-filter"
             onChange={ handleFilter }
           />
@@ -59,12 +59,80 @@ function Search() {
         <button
           type="button"
           data-testid="button-filter"
-          onClick={ () => handleButtonFilter(column, comparison, value) }
+          onClick={ handleButtonFilter }
         >
           Filtrar
 
         </button>
+        <button
+          type="button"
+          data-testid="button-remove-filters"
+          onClick={ removeFilters }
+        >
+          Remover todas filtragens
+
+        </button>
       </form>
+      {filters
+        && filters.map((item, index) => (
+          <div key={ `${index}-${item.value} ` }>
+            <span>{`${item.column} ${item.comparison} ${item.value}`}</span>
+            <button
+              type="button"
+              name={ item.column }
+              data-testid="filter"
+              onClick={ removeFilters }
+            >
+              x
+            </button>
+          </div>
+        ))}
+
+      <div />
+      <div>
+        <label htmlFor="column">
+          <p>ordenar por:</p>
+          <select
+            name="column"
+            value={ order.column }
+            data-testid="column-sort"
+            onChange={ handleOrder }
+          >
+            {
+              sortingType.map((item, index) => (
+                <option key={ `${item}-${index}` } value={ item }>{ item }</option>
+              ))
+            }
+          </select>
+        </label>
+        <label htmlFor="sort">
+          Ascendente:
+          <input
+            type="radio"
+            name="sort"
+            value="ASC"
+            data-testid="column-sort-input-asc"
+            onChange={ handleOrder }
+          />
+        </label>
+        <label htmlFor="sort">
+          descendente:
+          <input
+            type="radio"
+            name="sort"
+            value="DESC"
+            data-testid="column-sort-input-desc"
+            onChange={ handleOrder }
+          />
+        </label>
+        <button
+          type="button"
+          data-testid="column-sort-button"
+          onClick={ sortTable }
+        >
+          x
+        </button>
+      </div>
     </section>
 
   );
