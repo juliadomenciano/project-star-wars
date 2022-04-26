@@ -3,7 +3,7 @@ import { Context, sortingType } from '../StarWarsProvider';
 
 function Search() {
   const {
-    name, handleChange, value, comparison, column, handleFilter, handleButtonFilter,
+    name, handleChange, comparison, column, handleFilter, handleButtonFilter,
     filters, options, removeFilters, handleOrder, order, sortTable,
   } = useContext(Context);
 
