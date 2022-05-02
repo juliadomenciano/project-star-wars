@@ -1,9 +1,9 @@
-import React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
 import { act } from 'react-dom/test-utils';
-
 import App from './App';
 import testData from './testData';
+
 
 const ROW_ROLE_SELECTOR = 'row';
 const COLUMN_ROLE_SELECTOR = 'columnheader';
@@ -296,7 +296,7 @@ describe('3 - Crie um filtro para valores numéricos', () => {
   });
 });
 
-describe('4 - Implemente múltiplos filtros numéricos', () => {
+describe.only('4 - Implemente múltiplos filtros numéricos', () => {
   it('Adicione dois filtros e verifique se a tabela foi atualizada com as informações filtradas', async () => {
     await act(async () => {
       render(<App />);

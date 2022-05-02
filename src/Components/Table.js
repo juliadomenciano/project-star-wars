@@ -20,7 +20,7 @@ function Table() {
             <th>Orbital Period</th>
             <th>Diameter</th>
             <th>Climate</th>
-            <th>Gravaty</th>
+            <th>Gravity</th>
             <th>Terrain</th>
             <th>Surface Water</th>
             <th>Population</th>
