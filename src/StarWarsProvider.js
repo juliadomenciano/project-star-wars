@@ -49,35 +49,30 @@ function StarWarsProvider({ children }) {
     });
   };
 
-  const verifyData = () => {
-    const { comparison } = filters;
-
+  const comparisonFilter = (comparison, a, b) => {
     if (comparison === 'igual a') {
-      const filteredData = data
-        .filter((item) => filterByNumericValues
-          .every(({ column, value }) => item[column] === value));
-
-      setFilteredPlanets(filteredData);
-      console.log('0');
+      return a === b;
     }
     if (comparison === 'menor que') {
-      const filteredData = data
-        .filter((item) => filterByNumericValues
-          .every(({ column, value }) => item[column] < Number(value)));
-
-      setFilteredPlanets(filteredData);
-      console.log('1');
+      return a < b;
     }
     if (comparison === 'maior que') {
+      return a > b;
+    }
+  };
+
+  const verifyData = () => {
+    if (filterByNumericValues.length) {
       const filteredData = data
         .filter((item) => filterByNumericValues
-          .every(({ column, value }) => item[column] > Number(value)));
+          .every(({ column, value, comparison }) => comparisonFilter(comparison,
+            Number(item[column]), Number(value))))
+        .filter((item) => item.name.includes(filterByName.name));
 
       setFilteredPlanets(filteredData);
-      console.log('2');
+    } else {
+      setFilteredPlanets(data);
     }
-    console.log(filterByNumericValues);
-    console.log(filteredPlanets);
   };
 
   const handleFilter = (e) => {
@@ -92,7 +87,7 @@ function StarWarsProvider({ children }) {
     setFilterByNumericValues([...filterByNumericValues, { comparison, column, value }]);
 
     const filterOptions = options.filter((item) => item !== column);
-    setFilters({ ...filters, column: options[0] });
+    setFilters({ ...filters, column: options[1] });
     setOptions(filterOptions);
   };
 
@@ -100,7 +95,7 @@ function StarWarsProvider({ children }) {
   useEffect(() => { verifyData(); }, [filterByNumericValues]);
 
   const removeFilters = (column) => {
-    if (column) {
+    if (filterByNumericValues.length) {
       setOptions([...options, column]);
       setFilterByNumericValues(filterByNumericValues
         .filter((item) => item.column !== column));
@@ -108,6 +103,12 @@ function StarWarsProvider({ children }) {
     } else {
       setFilteredPlanets(data);
     }
+  };
+
+  const removeAllFilters = () => {
+    setOptions(sortingType);
+    setFilterByNumericValues([]);
+    setFilteredPlanets(data);
   };
 
   const sortTable = () => {
@@ -135,6 +136,7 @@ function StarWarsProvider({ children }) {
     filterByNumericValues,
     options,
     removeFilters,
+    removeAllFilters,
     handleOrder,
     order,
     sortTable,
@@ -150,5 +152,4 @@ StarWarsProvider.propTypes = {
   children: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 
-export default StarWarsProvider;
 export { Context, StarWarsProvider as Provider };

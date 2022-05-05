@@ -4,11 +4,11 @@ import { Context, sortingType } from '../StarWarsProvider';
 function Search() {
   const {
     name, handleChange, comparison, column, handleFilter, handleButtonFilter,
-    filterByNumericValues, options, removeFilters, handleOrder, order, sortTable, value,
+    filterByNumericValues, options, removeFilters, handleOrder, order, sortTable, /*  value, */
+    removeAllFilters,
   } = useContext(Context);
 
   return (
-
     <section>
       <form>
         <label htmlFor="name">
@@ -50,7 +50,7 @@ function Search() {
           <input
             type="number"
             name="value"
-            value={ value }
+            value={ 0 }
             placeholder={ 0 }
             data-testid="value-filter"
             onChange={ handleFilter }
@@ -67,13 +67,13 @@ function Search() {
         <button
           type="button"
           data-testid="button-remove-filters"
-          onClick={ removeFilters }
+          onClick={ removeAllFilters }
         >
           Remover todas filtragens
 
         </button>
       </form>
-      {filterByNumericValues !== []
+      {filterByNumericValues.length
         && filterByNumericValues.map((item, index) => (
           <div
             key={ `${index}-${item.value} ` }
@@ -83,14 +83,12 @@ function Search() {
             <button
               type="button"
               name={ item.column }
-              onClick={ () => { removeFilters(column); } }
+              onClick={ () => { removeFilters(item.column); } }
             >
               x
             </button>
           </div>
         ))}
-
-      <div />
       <div>
         <label htmlFor="column">
           <p>ordenar por:</p>
